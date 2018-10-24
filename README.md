@@ -1,5 +1,10 @@
-<<<<<<< HEAD
+
+
 # NodeSites
+
+## heading 2
+
+$x + y = z$
 
 Site for testing frontend / backend integrations using Typescript/Javascript and NodeJS
 
