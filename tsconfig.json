@@ -1,13 +1,17 @@
 {
     "compilerOptions": {
-        "module": "es2015cd",
+        "module": "es2015",
         "noImplicitAny": true,
-        "removeComments": false,
+        "removeComments": true,
         "preserveConstEnums": true,
-        "sourceMap": true
+        "inlineSourceMap": true
+       
     },
     "files": [
         "ajax/ajax.ts"
+    ],
+    "typeRoots": [
+        "./node_modules/@types"
     ]
   
 }
