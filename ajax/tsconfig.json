@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "module": "es2015",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "inlineSourceMap": true
+    },
+    "references": [
+        "./node_modules/popper.js/dist"
+    ],
+    "files": [
+        "ajax.ts"
+    ],
+    "typeRoots": [
+        "./node_modules/@types",
+        "./node_modules/popper.js/dist"
+    ]
+  
+}
