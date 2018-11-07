@@ -68,9 +68,15 @@ function getDefaultAjaxSettings():JQuery.AjaxSettings {
 }
 
 function test() {
+
+    let myObject = {};
+    // myObject.DataType = 4;
+    // myObject.urL="sdfaskjdf";
+
+
     //see http://api.jquery.com/jQuery.ajax/#jqXHR  as well as https://zinoui.com/blog/cross-domain-ajax-request
     let callSettings = getDefaultAjaxSettings();
-    
+    callSettings.dataType = "json";
     callSettings.url = "https://api.usaspending.gov/api/v2/financial_balances/agencies/?funding_agency_id=775&fiscal_year=2017";
     callSettings.url = "http://vus-glems-02:21212/commits/v1/approvers/me";
     //callSettings.url = "http://dca-db-407:21212/commits/v1/approvers/me";
@@ -78,7 +84,6 @@ function test() {
     //   callSettings.url = "http://vus-glems-02.amat.com:21212/commits/v1/approvers/me";
     //callSettings.dataType = "jsonp text json";
     callSettings.xhrFields = { withCredentials: true };
-    $.ajax(callSettings);
     // var promise = $.ajax(ajaxSettings);
     // promise.done(function( data ){
     //     console.log(data);

@@ -10,11 +10,6 @@
             float: left;
         }
     </style>
-    <!--
-  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-    crossorigin="anonymous"></script>
-  -->
     <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
         crossorigin="anonymous"></script>
 
@@ -22,10 +17,89 @@
 
 <body>
 
+   
+    <button onclick="testNodeGet()">Run Node Get Test</button>
+
+    <button onclick="testNodePost()">Run Node Post Test</button>
+
+    <button onclick="testNodeDelete()">Run Node Delete Test</button>
+
+    <button onclick="testNodePut()">Run Node Put Test</button>
     <div id="images"></div>
 
     <script>
+        function testNodeGet(){
+             $.getJSON("http://127.0.0.1:8080/listUsers", function(data, status, xhr){
+                let pretyJSON = JSON.stringify(data, null, 2);
+                $('#images').html("<pre>" +pretyJSON +"</pre>") ;
+            });
+           
+        }
+        function testNodePost(){
+            ajaxSetting = getDefaultAjaxSettings();
+            ajaxSetting.method = "POST";
+            ajaxSetting.contentType = "application/json";
+            ajaxSetting.url = "https://api.usaspending.gov/api/v2/bulk_download/list_agencies/";
+            ajaxSetting.data = "{\"agency\": 14}";
+            ajaxSetting.success =  function (data, status, xhr) {
+                console.log(status);
 
+                let prettyText = JSON.stringify(data, null, 2);
+                console.log(prettyText);
+                $('#images').html("<pre>"+prettyText+ "</pre>") ;
+                let responseHeaders = xhr.getAllResponseHeaders();
+                //   let responseHeader = xhr.getResponseHeader();
+                let responseText = xhr.responseText;
+                let responseCode = xhr.status;
+                let statusText = xhr.statusText;
+            }
+
+            jQuery.ajax(ajaxSetting);
+
+        }
+        function testNodeDelete(){
+            ajaxSetting = getDefaultAjaxSettings();
+            ajaxSetting.method = "DELETE";
+            ajaxSetting.contentType = "application/json";
+            ajaxSetting.url = "http://127.0.0.1:8080/id/2";
+           // ajaxSetting.data = "{\"agency\": 14}";
+            ajaxSetting.success =  function (data, status, xhr) {
+                console.log(status);
+
+                // let prettyText = JSON.stringify(data, null, 2);
+                // console.log(prettyText);
+                // $('#images').html("<pre>"+prettyText+ "</pre>") ;
+                // let responseHeaders = xhr.getAllResponseHeaders();
+                // //   let responseHeader = xhr.getResponseHeader();
+                // let responseText = xhr.responseText;
+                // let responseCode = xhr.status;
+                // let statusText = xhr.statusText;
+            }
+
+            jQuery.ajax(ajaxSetting);
+        }
+        function testNodePut(){
+            ajaxSetting = getDefaultAjaxSettings();
+            ajaxSetting.method = "PUT";
+            ajaxSetting.contentType = "application/json";
+            ajaxSetting.url = "https://api.usaspending.gov/api/v2/bulk_download/list_agencies/";
+            ajaxSetting.data = "{\"agency\": 14}";
+            ajaxSetting.success =  function (data, status, xhr) {
+                console.log(status);
+
+                let prettyText = JSON.stringify(data, null, 2);
+                console.log(prettyText);
+                $('#images').html("<pre>"+prettyText+ "</pre>") ;
+                let responseHeaders = xhr.getAllResponseHeaders();
+                //   let responseHeader = xhr.getResponseHeader();
+                let responseText = xhr.responseText;
+                let responseCode = xhr.status;
+                let statusText = xhr.statusText;
+            }
+
+            jQuery.ajax(ajaxSetting);
+        }
+  
         function getDefaultAjaxSettings() {
             let ajaxSettings = {};
 
@@ -123,14 +197,10 @@
             //       });
             //     });
 
-            test();
+           // test();
         })();
     </script>
 
 </body>
 
 </html>
-
-
-Rick Sprenkle
-rsprenkle@gmail.com
