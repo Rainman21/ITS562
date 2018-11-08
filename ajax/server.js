@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 //allow access to the files under the ajax directory to be addressed via the uri localhost:8080\static\<file>
 //app.use('static', express.static('C:\\SoftwareDevelopment\\ITS562\\github\\ITS562\\ajax\\'));
-app.use( express.static('C:\\Code\\ITS562\\ajax\\'));
+app.use( express.static('./'));
 
 var userdata = null;
 
