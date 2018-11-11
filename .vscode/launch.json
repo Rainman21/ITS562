@@ -5,7 +5,7 @@
             "type": "chrome",
             "request": "launch",
             "name": "AjaxTest Chrome",
-            "url": "http://localhost:8080/ajaxtest.html",
+            "url": "http://localhost:8080/ajaxworkbench.html",
             "webRoot": "${workspaceRoot}",
             "sourceMaps": true
         }
