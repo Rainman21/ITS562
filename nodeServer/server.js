@@ -5,6 +5,8 @@ var path = require('path');
 var serveStatic = require('serve-static');
 var cors = require('cors');
 var moment = require('moment');
+var os = require('os');
+
 var app = express();
 app.use(cors());
 app.options('*', cors());
@@ -79,6 +81,29 @@ app.get('/linedata', function (req, res) {
     res.end(JSON.stringify(data));
 
 });
+
+var MemoryHistory ={
+    "freemem" :  [os.freemem()],
+    "uptime" : [os.uptime()],
+    "snapshot" : [newDateString(0,0)]
+};
+
+
+//http://localhost:8080/listUsers
+app.get('/osinfo', function (req, res) {
+    let data =[];
+    let freemem = os.freemem();
+    let totalmem = os.totalmem();
+    let date = newDateString(0,0);
+    MemoryHistory.freemem.push(os.freemem());
+    MemoryHistory.uptime.push(os.uptime());
+    MemoryHistory.snapshot.push(date);
+    
+  
+    res.end(JSON.stringify(MemoryHistory));
+
+});
+
 
 
 //http://127.0.0.1:8081/id/2 

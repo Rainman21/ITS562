@@ -26,6 +26,7 @@
     <button id="randomizeData">Randomize Data</button>
     <button id="addData">Add Data</button>
     <button id="removeData">Remove Data</button>
+    <button id="osInfoButton">Show operating system history</button>
     <script>
         function newDate(days) {
             return moment().add(days, 'd').toDate();
@@ -39,45 +40,64 @@
             return Math.round(Math.random() * 100);
         };
 
+
+//-----------Node SErver Calls
+
+        function GetOSinfoFromNode(){
+
+
+            $.getJSON("http://localhost:8080/osinfo", function (data, status, xhr) {
+
+/*      Expecting this back...
+                var MemoryHistory ={
+                    "freemem" :  [os.freemem()],
+                    "uptime" : [os.uptime()],
+                    "snapshot" : [newDateString(0,0)]
+                };
+*/
+                console.log( JSON.stringify(data, null, 2));
+                config.data.datasets[0].data =  [];
+                config.data.datasets[1].data = [];
+
+            //   for(i = 0; i < data.freemem.length; i++){
+            //     let mempoint = {"y":i+2,"x":data.snapshot[i]};
+            //     let uptimePoint = {"y":i,"x":data.snapshot[i]};
+            //     config.data.datasets[0].data.push(mempoint);
+            //     config.data.datasets[1].data.push(uptimePoint);
+            //   }
+
+            for(i = 0; i < data.freemem.length; i++){
+                let mempoint = {"y":data.freemem[i]/1e6,"x":data.snapshot[i]};
+                let uptimePoint = {"y":data.uptime[i],"x":data.snapshot[i]};
+                config.data.datasets[0].data.push(mempoint);
+                config.data.datasets[1].data.push(uptimePoint);
+              }
+
+
+
+              config.data.datasets[0].label = "Free memory MB";
+              config.data.datasets[1].label = "Uptime (seconds)";
+
+                window.myLine.update();
+
+              
+            });
+        }
         function GetDataFromNode( dataarrayToUpdate){
 
             $.getJSON("http://localhost:8080/linedata", function (data, status, xhr) {
                 console.log( JSON.stringify(data, null, 2));
                 config.data.datasets[0].data = [];
                 config.data.datasets[1].data = [];
-                
+
               for(i = 0; i < data.length; i++){
                 config.data.datasets[0].data.push(data[i]);
               }
-
-            //  if (config.data.datasets.length > 0) {
-            //     config.data.datasets[0].data.push({
-            //         x: newDateString(config.data.datasets[0].data.length + 2),
-            //         y: randomScalingFactor()
-            //     });
-            //     config.data.datasets[1].data.push({
-            //         x: newDate(config.data.datasets[1].data.length + 2),
-            //         y: randomScalingFactor()
-            //     });
+           
 
                 window.myLine.update();
 
-                //dataarrayToUpdate = data;
-                 //window.myLine.update();
-                // let tableHeadings = {
 
-                //     "name": "User Name",
-                //     "password": "Password",
-                //     "profession": "Profession",
-                //     "id": "ID"
-                // };
-                
-  
-
-                // DisplayJSONobjectArrayAsTable(data, "table", tableHeadings);
-
-                // let pretyJSON = JSON.stringify(data, null, 2);
-                // $('#images').html("<pre>" + pretyJSON + "</pre>");
             });
         }
 
@@ -162,10 +182,13 @@
             }
         };
 
+//---------------ENTRY POINT
         window.onload = function() {
             var ctx = document.getElementById('canvas').getContext('2d');
             window.myLine = new Chart(ctx, config);
         };
+
+//---------------CONNECT UP THE BUTTONS
 
         document.getElementById('randomizeData').addEventListener('click', function() {
             config.data.datasets.forEach(function(dataset) {
@@ -176,6 +199,7 @@
 
             window.myLine.update();
         });
+
         document.getElementById('addData').addEventListener('click', function() {
             if (config.data.datasets.length > 0) {
                 config.data.datasets[0].data.push({
@@ -191,13 +215,18 @@
             }
         });
 
-         document.getElementById('fetchFromNode').addEventListener('click', function() {
+        document.getElementById('osInfoButton').addEventListener('click',  function(){
+            GetOSinfoFromNode();
+        });
+        
+        
+        document.getElementById('fetchFromNode').addEventListener('click', function() {
             config.data.datasets.forEach(function(dataset) {
                 GetDataFromNode(dataset.data);
             });
-
-            
         });
+
+
         document.getElementById('removeData').addEventListener('click', function() {
             config.data.datasets.forEach(function(dataset) {
                 dataset.data.pop();
