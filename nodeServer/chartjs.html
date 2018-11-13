@@ -5,6 +5,8 @@
     <title>Time Scale Point Data</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous"></script>
     <style>
         canvas {
             -moz-user-select: none;
@@ -20,6 +22,7 @@
     </div>
     <br>
     <br>
+    <button id="fetchFromNode">Fettch From node</button>
     <button id="randomizeData">Randomize Data</button>
     <button id="addData">Add Data</button>
     <button id="removeData">Remove Data</button>
@@ -35,6 +38,51 @@
         var randomScalingFactor = function() {
             return Math.round(Math.random() * 100);
         };
+
+        function GetDataFromNode( dataarrayToUpdate){
+
+            $.getJSON("http://localhost:8080/linedata", function (data, status, xhr) {
+                console.log( JSON.stringify(data, null, 2));
+                config.data.datasets[0].data = [];
+                config.data.datasets[1].data = [];
+                
+              for(i = 0; i < data.length; i++){
+                config.data.datasets[0].data.push(data[i]);
+              }
+
+            //  if (config.data.datasets.length > 0) {
+            //     config.data.datasets[0].data.push({
+            //         x: newDateString(config.data.datasets[0].data.length + 2),
+            //         y: randomScalingFactor()
+            //     });
+            //     config.data.datasets[1].data.push({
+            //         x: newDate(config.data.datasets[1].data.length + 2),
+            //         y: randomScalingFactor()
+            //     });
+
+                window.myLine.update();
+
+                //dataarrayToUpdate = data;
+                 //window.myLine.update();
+                // let tableHeadings = {
+
+                //     "name": "User Name",
+                //     "password": "Password",
+                //     "profession": "Profession",
+                //     "id": "ID"
+                // };
+                
+  
+
+                // DisplayJSONobjectArrayAsTable(data, "table", tableHeadings);
+
+                // let pretyJSON = JSON.stringify(data, null, 2);
+                // $('#images').html("<pre>" + pretyJSON + "</pre>");
+            });
+        }
+
+
+
         var color = Chart.helpers.color;
         var config = {
             type: 'line',
@@ -143,6 +191,13 @@
             }
         });
 
+         document.getElementById('fetchFromNode').addEventListener('click', function() {
+            config.data.datasets.forEach(function(dataset) {
+                GetDataFromNode(dataset.data);
+            });
+
+            
+        });
         document.getElementById('removeData').addEventListener('click', function() {
             config.data.datasets.forEach(function(dataset) {
                 dataset.data.pop();
@@ -150,6 +205,75 @@
 
             window.myLine.update();
         });
+
+        function testNodePost() {
+            //Setup the settings
+            ajaxSetting = getDefaultAjaxSettings();
+            ajaxSetting.method = "POST";
+            ajaxSetting.contentType = "application/json";
+            ajaxSetting.url = "https://api.usaspending.gov/api/v2/bulk_download/list_agencies/";
+            ajaxSetting.data = "{\"agency\": 14}";
+            ajaxSetting.success = function (data, status, xhr) {
+                console.log(status);
+                let prettyText = JSON.stringify(data, null, 2);
+                console.log(prettyText);
+                //Show text as innerhtml of the images element, use preformatted to keep whitespace
+                $('#images').html("<pre>" + prettyText + "</pre>");
+     
+            }
+
+            //Make the call with settings (the .success function will handle the results)
+            jQuery.ajax(ajaxSetting);
+
+        }
+        
+          function getDefaultAjaxSettings() {
+            let ajaxSettings = {};
+
+            ajaxSettings.async = true;
+            //;ajaxSettings.beforeSend = function(jqXHR, settings)
+            ajaxSettings.cache = false;
+            ajaxSettings.complete = function (xhr, status) {
+                console.log(status);
+            }
+            ajaxSettings.contentType = 'application/x-www-form-urlencoded; charset=UTF-8';
+            ajaxSettings.crossDomain = true;
+            //ajaxSettings.data = object of key value pairs for creating query string in GET requests
+            //ajaxSettings.dataFilter = function(data, filtertyp) - for processing raw data response
+            ajaxSettings.datatype = "json";//"jsonp text json"; // or xml, html, script, json,jsonp or text
+            ajaxSettings.error = function (xhr, status, error) {
+                console.log(status + " :" + error)
+            };
+            ajaxSettings.global = true;  // trigger ajaxstart, ajaxstop
+            //ajaxSettings.headers = {};
+            //ajaxSettings.ifModified = false;
+            //ajaxSettings.isLocal = true; // for getting local file system data
+            //ajaxSettings.jsonCallback  - function() to call on JSONP request
+            ajaxSettings.method = "GET";
+            //ajaxSettings.mimeType =
+            //ajaxSettings.password = 
+            //ajaxSettings.processData = true;  do you parse the object into a query string...
+            //ajaxSettings.scriptCharset = charset for script requeetss
+            //ajaxSettings.statusCode  -- cool , for overriding status code response type
+            // ajaxSetting.statusCode = {
+            //      404: function() {
+            //              alert( "page not found" );
+            //     }
+            // };
+            ajaxSettings.success = function (data, status, xhr) {  //this is a typical success hanlder
+                console.log(status);
+                let prettyText = JSON.stringify(data, null, 2);
+                console.log(prettyText);
+            }
+
+            ajaxSettings.timeout = 5000; //timeout in millieseconds
+            ajaxSettings.traditional = false; // set to true to use traditional param serialization
+            ajaxSettings.url = "https://api.usaspending.gov/api/v2/financial_balances/agencies/?funding_agency_id=775&fiscal_year=2017";
+            //ajaxSettings.xhr = function (xhr){}  for overrideing xhr object
+            //ajaxSettings.xhrFields = {withCredentials:true};
+            return ajaxSettings;
+        }
+
     </script>
 </body>
 

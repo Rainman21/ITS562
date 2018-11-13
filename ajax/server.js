@@ -32,7 +32,8 @@ app.get('/listUsers', function (req, res) {
        
         res.end(data);
     });
-})
+});
+
 
 //http://localhost:8081/listUsers
 app.get('/randomcard', function (req, res) {

@@ -4,7 +4,7 @@ var fs = require("fs");
 var path = require('path');
 var serveStatic = require('serve-static');
 var cors = require('cors');
-
+var moment = require('moment');
 var app = express();
 app.use(cors());
 app.options('*', cors());
@@ -17,7 +17,9 @@ app.use( express.static('./'));
 
 var userdata = null;
 
-
+var randomScalingFactor = function() {
+    return Math.round(Math.random() * 100);
+};
 
 ////app.use(bodyParser.json);
 //app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -38,6 +40,44 @@ app.get('/listUsers', function (req, res) {
 app.get('/randomcard', function (req, res) {
     var card = "images/" + Math.floor(1 + (Math.random() * 7)).toString() + "_S.png";
     res.send(card);
+});
+
+function newDate(days, minutes) {
+    let now =  moment();
+    now.add(days, 'd');
+    if(minutes){
+        now.add(minutes, 'm')
+    
+    }
+    return now.toDate();
+}
+
+function newDateString(days, minutes) {
+    let now =  moment();
+    now.add(days, 'd');
+    if(minutes){
+        now.add(minutes, 'm')
+    
+    }
+    return now.format();
+
+    
+}
+
+//http://localhost:8080/listUsers
+app.get('/linedata', function (req, res) {
+    let data =[];
+
+    for(i = 0; i < 25; i++){
+        let datapoint = {
+            x:newDateString(0, i*30),
+            y: randomScalingFactor()
+        }
+        data.push(datapoint);
+    }
+  
+    res.end(JSON.stringify(data));
+
 });
 
 
