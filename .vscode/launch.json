@@ -2,6 +2,12 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "node",
+            "request": "launch",
+            "name": "Run Node on server.js",
+            "program": "${workspaceFolder}/nodeServer/server.js"
+        },
+        {
             "type": "chrome",
             "request": "launch",
             "name": "AjaxTest Chrome",
