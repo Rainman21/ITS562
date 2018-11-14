@@ -10,6 +10,8 @@ npm install express --local
 npm install body-parser --local
 npm install fs --local
 npm install cors --local
+npm install moment --local
+npm install body-parser --local
 ```
 
 ## Setting up for Debuggging
@@ -58,6 +60,22 @@ If you are setup properly, when you run Debugger --> Run node on server.js, you 
 ```console
 Example app listening at http://127.0.0.1:8080
 ```
+## Submitting your work
+
+ You should be able to run the Node Server from VS Code in the debugger, set breakpoints in the server.js methods for app.get / app.set, etc. and see them hit when you try the server from either a web page or Postman.
+
+Use this server.js as your starting point, and modify or add get / post / delete and put methods, and create a page that can call each with a button press.
+
+Follow the instructions on the Readme.md page and put the server.js, and web page files in your individual student subfolders of your team git repository.
+
+In this folder, place a readme.md that describes what you did, and any questions or comments you have, and submit the github link to this page.
+
+For example, if the page you are reading now is your submission, you might 'submit' the following URL to canvas:
+
+<https://github.com/Rainman21/ITS562/blob/master/nodeServer/README.md>
+
+Inside your readme, you can link to your submissions as well, either by their github 'source' link (like above), or the github 'html site' link (if it is a web page)
+
 
 ## Tips
 
