@@ -134,22 +134,16 @@
             ajaxSetting.method = "DELETE";
             ajaxSetting.contentType = "application/json";
             ajaxSetting.url = "http://127.0.0.1:8080/id/2";
-           // ajaxSetting.data = "{\"agency\": 14}";
             ajaxSetting.success =  function (data, status, xhr) {
                 console.log(status);
 
-                // let prettyText = JSON.stringify(data, null, 2);
-                // console.log(prettyText);
-                // $('#images').html("<pre>"+prettyText+ "</pre>") ;
-                // let responseHeaders = xhr.getAllResponseHeaders();
-                // //   let responseHeader = xhr.getResponseHeader();
-                // let responseText = xhr.responseText;
-                // let responseCode = xhr.status;
-                // let statusText = xhr.statusText;
+                
             }
 
             jQuery.ajax(ajaxSetting);
         }
+
+
         function testNodePut(){
             ajaxSetting = getDefaultAjaxSettings();
             ajaxSetting.method = "PUT";
@@ -227,7 +221,7 @@
             ajaxSettings.timeout = 5000; //timeout in millieseconds
             ajaxSettings.traditional = false; // set to true to use traditional param serialization
             //ajaxSettings.type = "GET"; // same as method for backward compat (< 1.10)
-            ajaxSettings.url = "https://api.usaspending.gov/api/v2/financial_balances/agencies/?funding_agency_id=775&fiscal_year=2017";
+            //ajaxSettings.url = "https://api.usaspending.gov/api/v2/financial_balances/agencies/?funding_agency_id=775&fiscal_year=2017";
             //ajaxSettings.xhr = function (xhr){}  for overrideing xhr object
             //  ajaxSettings.xhrFields = {withCredentials:true};
             return ajaxSettings;
