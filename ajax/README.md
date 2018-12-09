@@ -32,15 +32,12 @@ Need to start with "npm init"
 var s = "JavaScript syntax highlighting";
 alert(s);
 ```
-Headers
-# H1
-## H2
-### H3
-#### H4
+
+# Markdown (.md) Cheatsheet
 
 [Markdown Cheatsheat](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
 
-# TODO
+# Getting started with your own Node Site
 + Run "npm init" to setup your package file
 + install npm dependencies 
     + **express** (webapi)
@@ -56,5 +53,5 @@ npm install fs --local
 ```
 
 
-# 1 resources
+# Javascript tips
 [How to delete items from an array](https://www.w3schools.com/js/tryit.asp?filename=tryjs_array_remove)

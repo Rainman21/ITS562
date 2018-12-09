@@ -31,24 +31,6 @@
     <table id="table"></table>
 
     <script>
-<<<<<<< HEAD
-        function testNodeGet(){
-             $.getJSON("http://127.0.0.1:8080/listUsers", function(data, status, xhr){
-                let pretyJSON = JSON.stringify(data, null, 2);
-                $('#images').html(pretyJSON) ;
-            });
-           
-        }
-        function testNodePost(){
-            ajaxSetting = getDefaultAjaxSettings();
-            ajaxSetting.method = "POST";
-            ajaxSetting.contentType = "application/json";
-            ajaxSetting.url = "https://api.usaspending.gov/api/v2/bulk_download/list_agencies/";
-            ajaxSetting.data = "{\"agency\": 14}";
-            ajaxSetting.success =  function (data, status, xhr) {
-                console.log(status);
-
-=======
             //keyToHeadingArray is a map of object key to column header
          function DisplayJSONobjectArrayAsTable(arrayOfObjects, elementID, keyToHeadingArray) {
                 let innerHTML = "";
@@ -136,7 +118,6 @@
             ajaxSetting.success =  function (data, status, xhr) {
                 console.log(status);
 
->>>>>>> 136472d06e62d0bd61021b56c0d00d3a157ea659
                 let prettyText = JSON.stringify(data, null, 2);
                 console.log(prettyText);
                 $('#images').html("<pre>"+prettyText+ "</pre>") ;
@@ -150,16 +131,11 @@
             jQuery.ajax(ajaxSetting);
 
         }
-<<<<<<< HEAD
-
-=======
->>>>>>> 136472d06e62d0bd61021b56c0d00d3a157ea659
         function testNodeDelete(){
             ajaxSetting = getDefaultAjaxSettings();
             ajaxSetting.method = "DELETE";
             ajaxSetting.contentType = "application/json";
             ajaxSetting.url = "http://127.0.0.1:8080/id/2";
-<<<<<<< HEAD
             ajaxSetting.success =  function (data, status, xhr) {
                 console.log(status);
 
@@ -177,7 +153,7 @@
             ajaxSetting.success =  function (data, status, xhr) {
                 console.log(status);
 
-=======
+
            // ajaxSetting.data = "{\"agency\": 14}";
             ajaxSetting.success =  function (data, status, xhr) {
                 console.log(status);
@@ -190,11 +166,12 @@
                 // let responseText = xhr.responseText;
                 // let responseCode = xhr.status;
                 // let statusText = xhr.statusText;
->>>>>>> 136472d06e62d0bd61021b56c0d00d3a157ea659
             }
 
             jQuery.ajax(ajaxSetting);
         }
+
+
         function testNodePut(){
             ajaxSetting = getDefaultAjaxSettings();
             ajaxSetting.method = "PUT";
@@ -272,36 +249,34 @@
             ajaxSettings.timeout = 5000; //timeout in millieseconds
             ajaxSettings.traditional = false; // set to true to use traditional param serialization
             //ajaxSettings.type = "GET"; // same as method for backward compat (< 1.10)
-            ajaxSettings.url = "https://api.usaspending.gov/api/v2/financial_balances/agencies/?funding_agency_id=775&fiscal_year=2017";
+            //ajaxSettings.url = "https://api.usaspending.gov/api/v2/financial_balances/agencies/?funding_agency_id=775&fiscal_year=2017";
             //ajaxSettings.xhr = function (xhr){}  for overrideing xhr object
             //  ajaxSettings.xhrFields = {withCredentials:true};
             return ajaxSettings;
         }
 
-<<<<<<< HEAD
       
 
 
         //this example is a bit more tricky -- it uses Jquery $ methods to simplify coding
-        function getFlickerImages() {
-              var flickerAPI = "https://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?";
-              $.getJSON( flickerAPI, {
-                tags: "mount rainier",
-                tagmode: "any",
-                format: "json"
-              })
-                .done(function( data ) {
-                  $.each( data.items, function( i, item ) {
-                    $( "<img>" ).attr( "src", item.media.m ).appendTo( "#images" );
-                    if ( i === 3 ) {
-                      return false;
-                    }
-                  });
-                });
+        // function getFlickerImages() {
+        //       var flickerAPI = "https://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?";
+        //       $.getJSON( flickerAPI, {
+        //         tags: "mount rainier",
+        //         tagmode: "any",
+        //         format: "json"
+        //       })
+        //         .done(function( data ) {
+        //           $.each( data.items, function( i, item ) {
+        //             $( "<img>" ).attr( "src", item.media.m ).appendTo( "#images" );
+        //             if ( i === 3 ) {
+        //               return false;
+        //             }
+        //           });
+        //         });
 
-           test();
-            };
-=======
+        //    test();
+        //     };
         function test() {
             //see http://api.jquery.com/jQuery.ajax/#jqXHR  as well as https://zinoui.com/blog/cross-domain-ajax-request
             let callSettings = getDefaultAjaxSettings();
@@ -321,7 +296,7 @@
         }
 
 
-
+<!-- 
         (function () {
             //   var flickerAPI = "https://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?";
             //   $.getJSON( flickerAPI, {
@@ -339,14 +314,9 @@
             //     });
 
            // test();
-        })();
->>>>>>> 136472d06e62d0bd61021b56c0d00d3a157ea659
+        })(); -->
     </script>
 
 </body>
 
-<<<<<<< HEAD
 </html>
-=======
-</html>
->>>>>>> 136472d06e62d0bd61021b56c0d00d3a157ea659

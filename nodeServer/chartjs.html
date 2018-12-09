@@ -1,0 +1,309 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Time Scale Point Data</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous"></script>
+    <style>
+        canvas {
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="width:75%;">
+        <canvas id="canvas"></canvas>
+    </div>
+    <br>
+    <br>
+    <button id="fetchFromNode">Fettch From node</button>
+    <button id="randomizeData">Randomize Data</button>
+    <button id="addData">Add Data</button>
+    <button id="removeData">Remove Data</button>
+    <button id="osInfoButton">Show operating system history</button>
+    <script>
+        function newDate(days) {
+            return moment().add(days, 'd').toDate();
+        }
+
+        function newDateString(days) {
+            return moment().add(days, 'd').format(); //like "2014-09-08T08:02:17-05:00"
+            
+        }
+        var randomScalingFactor = function() {
+            return Math.round(Math.random() * 100);
+        };
+
+
+//-----------Node SErver Calls
+
+        function GetOSinfoFromNode(){
+
+
+            $.getJSON("http://localhost:8080/osinfo", function (data, status, xhr) {
+
+/*      Expecting this back...
+                var MemoryHistory ={
+                    "freemem" :  [os.freemem()],
+                    "uptime" : [os.uptime()],
+                    "snapshot" : [newDateString(0,0)]
+                };
+*/
+                console.log( JSON.stringify(data, null, 2));
+                config.data.datasets[0].data =  [];
+                config.data.datasets[1].data = [];
+
+            //   for(i = 0; i < data.freemem.length; i++){
+            //     let mempoint = {"y":i+2,"x":data.snapshot[i]};
+            //     let uptimePoint = {"y":i,"x":data.snapshot[i]};
+            //     config.data.datasets[0].data.push(mempoint);
+            //     config.data.datasets[1].data.push(uptimePoint);
+            //   }
+
+            for(i = 0; i < data.freemem.length; i++){
+                let mempoint = {"y":data.freemem[i]/1e6,"x":data.snapshot[i]};
+                let uptimePoint = {"y":data.uptime[i],"x":data.snapshot[i]};
+                config.data.datasets[0].data.push(mempoint);
+                config.data.datasets[1].data.push(uptimePoint);
+              }
+
+
+
+              config.data.datasets[0].label = "Free memory MB";
+              config.data.datasets[1].label = "Uptime (seconds)";
+
+                window.myLine.update();
+
+              
+            });
+        }
+        function GetDataFromNode( dataarrayToUpdate){
+
+            $.getJSON("http://localhost:8080/linedata", function (data, status, xhr) {
+                console.log( JSON.stringify(data, null, 2));
+                config.data.datasets[0].data = [];
+                config.data.datasets[1].data = [];
+
+              for(i = 0; i < data.length; i++){
+                config.data.datasets[0].data.push(data[i]);
+              }
+           
+
+                window.myLine.update();
+
+
+            });
+        }
+
+
+
+        var color = Chart.helpers.color;
+        var config = {
+            type: 'line',
+            data: {
+                datasets: [{
+                    label: 'Dataset with string point data',
+                    //backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),-- Util.js
+                //   backgroundColor: rgb(255, 99, 132).alpha(0.5).rgbString(),
+                    backgroundColor : "rgba(255,99,132,0.5)",
+            
+                    borderColor: "rgb(255,99,132)",
+                    fill: false,
+                    data: [{
+                        x: newDateString(0),
+                        y: randomScalingFactor()
+                    }, {
+                        x: newDateString(2),
+                        y: randomScalingFactor()
+                    }, {
+                        x: newDateString(4),
+                        y: randomScalingFactor()
+                    }, {
+                        x: newDateString(5),
+                        y: randomScalingFactor()
+                    }],
+                }, {
+                    label: 'Dataset with date object point data',
+                    //backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),  -- Util.js
+                    //backgroundColor: rgb(54, 162, 235).alpha(0.5).rgbString(),
+                    backgroundColor: "rgba(54,162,235,0.5)",
+                    borderColor: "rgb(54,162,235)",
+                    fill: false,
+                    data: [{
+                        x: newDateString(0),
+                        y: randomScalingFactor()
+                    }, {
+                        x: newDateString(2),
+                        y: randomScalingFactor()
+                    }, {
+                        x: newDate(4),
+                        y: randomScalingFactor()
+                    }, {
+                        x: newDate(5),
+                        y: randomScalingFactor()
+                    }]
+                }]
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Chart.js Time Point Data'
+                },
+                scales: {
+                    xAxes: [{
+                        type: 'time',
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Date'
+                        },
+                        ticks: {
+                            major: {
+                                fontStyle: 'bold',
+                                fontColor: '#FF0000'
+                            }
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'value'
+                        }
+                    }]
+                }
+            }
+        };
+
+//---------------ENTRY POINT
+        window.onload = function() {
+            var ctx = document.getElementById('canvas').getContext('2d');
+            window.myLine = new Chart(ctx, config);
+        };
+
+//---------------CONNECT UP THE BUTTONS
+
+        document.getElementById('randomizeData').addEventListener('click', function() {
+            config.data.datasets.forEach(function(dataset) {
+                dataset.data.forEach(function(dataObj) {
+                    dataObj.y = randomScalingFactor();
+                });
+            });
+
+            window.myLine.update();
+        });
+
+        document.getElementById('addData').addEventListener('click', function() {
+            if (config.data.datasets.length > 0) {
+                config.data.datasets[0].data.push({
+                    x: newDateString(config.data.datasets[0].data.length + 2),
+                    y: randomScalingFactor()
+                });
+                config.data.datasets[1].data.push({
+                    x: newDate(config.data.datasets[1].data.length + 2),
+                    y: randomScalingFactor()
+                });
+
+                window.myLine.update();
+            }
+        });
+
+        document.getElementById('osInfoButton').addEventListener('click',  function(){
+            GetOSinfoFromNode();
+        });
+        
+        
+        document.getElementById('fetchFromNode').addEventListener('click', function() {
+            config.data.datasets.forEach(function(dataset) {
+                GetDataFromNode(dataset.data);
+            });
+        });
+
+
+        document.getElementById('removeData').addEventListener('click', function() {
+            config.data.datasets.forEach(function(dataset) {
+                dataset.data.pop();
+            });
+
+            window.myLine.update();
+        });
+
+        function testNodePost() {
+            //Setup the settings
+            ajaxSetting = getDefaultAjaxSettings();
+            ajaxSetting.method = "POST";
+            ajaxSetting.contentType = "application/json";
+            ajaxSetting.url = "https://api.usaspending.gov/api/v2/bulk_download/list_agencies/";
+            ajaxSetting.data = "{\"agency\": 14}";
+            ajaxSetting.success = function (data, status, xhr) {
+                console.log(status);
+                let prettyText = JSON.stringify(data, null, 2);
+                console.log(prettyText);
+                //Show text as innerhtml of the images element, use preformatted to keep whitespace
+                $('#images').html("<pre>" + prettyText + "</pre>");
+     
+            }
+
+            //Make the call with settings (the .success function will handle the results)
+            jQuery.ajax(ajaxSetting);
+
+        }
+        
+          function getDefaultAjaxSettings() {
+            let ajaxSettings = {};
+
+            ajaxSettings.async = true;
+            //;ajaxSettings.beforeSend = function(jqXHR, settings)
+            ajaxSettings.cache = false;
+            ajaxSettings.complete = function (xhr, status) {
+                console.log(status);
+            }
+            ajaxSettings.contentType = 'application/x-www-form-urlencoded; charset=UTF-8';
+            ajaxSettings.crossDomain = true;
+            //ajaxSettings.data = object of key value pairs for creating query string in GET requests
+            //ajaxSettings.dataFilter = function(data, filtertyp) - for processing raw data response
+            ajaxSettings.datatype = "json";//"jsonp text json"; // or xml, html, script, json,jsonp or text
+            ajaxSettings.error = function (xhr, status, error) {
+                console.log(status + " :" + error)
+            };
+            ajaxSettings.global = true;  // trigger ajaxstart, ajaxstop
+            //ajaxSettings.headers = {};
+            //ajaxSettings.ifModified = false;
+            //ajaxSettings.isLocal = true; // for getting local file system data
+            //ajaxSettings.jsonCallback  - function() to call on JSONP request
+            ajaxSettings.method = "GET";
+            //ajaxSettings.mimeType =
+            //ajaxSettings.password = 
+            //ajaxSettings.processData = true;  do you parse the object into a query string...
+            //ajaxSettings.scriptCharset = charset for script requeetss
+            //ajaxSettings.statusCode  -- cool , for overriding status code response type
+            // ajaxSetting.statusCode = {
+            //      404: function() {
+            //              alert( "page not found" );
+            //     }
+            // };
+            ajaxSettings.success = function (data, status, xhr) {  //this is a typical success hanlder
+                console.log(status);
+                let prettyText = JSON.stringify(data, null, 2);
+                console.log(prettyText);
+            }
+
+            ajaxSettings.timeout = 5000; //timeout in millieseconds
+            ajaxSettings.traditional = false; // set to true to use traditional param serialization
+            ajaxSettings.url = "https://api.usaspending.gov/api/v2/financial_balances/agencies/?funding_agency_id=775&fiscal_year=2017";
+            //ajaxSettings.xhr = function (xhr){}  for overrideing xhr object
+            //ajaxSettings.xhrFields = {withCredentials:true};
+            return ajaxSettings;
+        }
+
+    </script>
+</body>
+
+</html>
