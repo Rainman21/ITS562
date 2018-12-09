@@ -6,13 +6,12 @@
         "preserveConstEnums": true,
         "inlineSourceMap": true
     },
+    
     "files": [
-        "ajax.ts",
-        "typescriptTest.ts"
+        "homework.ts"
     ],
     "typeRoots": [
         "./node_modules/@types",
-        "./node_modules/popper.js/dist"
     ]
   
 }

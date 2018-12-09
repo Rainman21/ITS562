@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 //allow access to the files under the ajax directory to be addressed via the uri localhost:8080\static\<file>
 //app.use('static', express.static('C:\\SoftwareDevelopment\\ITS562\\github\\ITS562\\ajax\\'));
-app.use( express.static('C:\\SoftwareDevelopment\\ITS562\\github\\ITS562\\ajax\\'));
+app.use( express.static('./'));
 
 var userdata = null;
 
@@ -33,6 +33,20 @@ app.get('/listUsers', function (req, res) {
         res.end(data);
     });
 })
+
+app.get('/', function (req, res) {
+    console.log("Reading default");
+    console.log(req);
+    fs.readFile(__dirname + "/" + "ajaxtest.html", 'utf8', function (err, data) {
+        res.end(data);
+    });
+})
+
+app.get('/test', function (req, res) {
+    
+        res.end("Weldome");
+    });
+
 
 //http://localhost:8081/listUsers
 app.get('/randomcard', function (req, res) {
@@ -80,6 +94,23 @@ app.get('/randomcardImage', function (req, res) {
     });
 
 });
+
+app.get('/mirror',function(req,res){
+    let response = {};
+    response.VERB = "GET";
+   // response.Request = req;
+    res.end(JSON.stringify(response));
+});
+
+app.post('/mirror',function(req,res){
+    let response = {};
+    response.VERB = "POST";
+    response.BODY = req.body;
+ //   response.Request = req;
+    res.end(JSON.stringify(response));
+});
+
+
 //Must use Fiddler here... Post to //http://localhost:8081/addUser
 app.post('/addUser', function (req, res) {
     // First read existing users.
@@ -101,7 +132,7 @@ app.get('/id/:id', function (req, res) {
     fs.readFile(__dirname + "/" + "users.json", 'utf8', function (err, data) {
         var users = JSON.parse(data);
         var user = users["user" + req.params.id]
-        console.log(user);
+       // console.log(user);
         res.end(JSON.stringify(user));
     });
 });
@@ -122,10 +153,10 @@ app.delete('/deleteUser', function (req, res) {
     });
 });
 
-var server = app.listen(8080, "127.0.0.1", function () {
+var server = app.listen(8080, "US-RSPRENKL-L3A", function () {
     fs.readFile(__dirname + "/" + "users.json", 'utf8', function (err, data) {
         userdata = JSON.parse(data);
-        console.log(data);
+        //console.log(data);
         var serverAddress = server.address();
         var host = serverAddress.address;
          var port = server.address().port;

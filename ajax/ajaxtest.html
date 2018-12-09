@@ -28,8 +28,10 @@
 
     <button onclick="getFlickerImages()">Get Flicker Images</button>
     <div id="images"></div>
+    <table id="table"></table>
 
     <script>
+<<<<<<< HEAD
         function testNodeGet(){
              $.getJSON("http://127.0.0.1:8080/listUsers", function(data, status, xhr){
                 let pretyJSON = JSON.stringify(data, null, 2);
@@ -46,6 +48,95 @@
             ajaxSetting.success =  function (data, status, xhr) {
                 console.log(status);
 
+=======
+            //keyToHeadingArray is a map of object key to column header
+         function DisplayJSONobjectArrayAsTable(arrayOfObjects, elementID, keyToHeadingArray) {
+                let innerHTML = "";
+                let keys = [];
+                if (arrayOfObjects.length > 0) {
+
+                    //write head
+                    innerHTML += "<thead><tr>";
+                    keys = Object.keys(arrayOfObjects[0]);
+                    for (key = 0; key < keys.length; key++) {
+                        let columnHeading =  keys[key];
+                        try{
+                            if(keyToHeadingArray){
+                                columnHeading= keyToHeadingArray[columnHeading];
+                            }
+                        }
+                        catch(err){
+                            console.log(err);
+                        }
+                         innerHTML += "<th>" + columnHeading + "</th>";
+                                
+                        
+                    }
+                    innerHTML += "</tr></thead>";
+
+                    //write body
+                    innerHTML += "<tbody>";
+                    for (i = 0; i < arrayOfObjects.length; i++) {
+                        let currentObject = arrayOfObjects[i];
+                        innerHTML += "<tr>";
+                        for (j = 0; j < keys.length; j++) {
+                            let currentValue = currentObject[keys[j]];
+                            innerHTML += "<td>" + currentValue + "</td>";
+                        }
+                        innerHTML += "</tr>";
+
+                        // innerHTML += "<li>"+ arrayOfstring[i] + "</li>";
+
+                    }
+
+                    innerHTML += "</tbody>";
+
+                }
+
+
+                document.getElementById(elementID).innerHTML = innerHTML;
+            }
+        
+        function testNodeGet(){
+             $.getJSON("http://127.0.0.1:8080/listUsers", function(data, status, xhr){
+                  //tableHeadings.push({})
+                let tableHeadings = {
+               
+                    "name": "User Name",
+                    "password" : "Password",
+                    "profession": "Profession",
+                    "id": "ID"
+                };
+                // let tableHeadings=[];
+                // tableHeadings["name"] = "User Name";
+                //  tableHeadings["password"] = "Password";
+                //  tableHeadings["profession"] = "Profession";
+                //  tableHeadings["id"] = "ID";
+                
+                
+                 //sometimes yhou need to conver an object as a set of keys to an array of objects
+                 let objectKeys = Object.keys(data);
+                 let dataArray = [];
+                 for( i =0; i < objectKeys.length; i++){
+                     dataArray.push(data[objectKeys[i]]);
+                 }
+                 DisplayJSONobjectArrayAsTable(dataArray,"table", tableHeadings);
+
+                let pretyJSON = JSON.stringify(data, null, 2);
+                $('#images').html("<pre>" +pretyJSON +"</pre>") ;
+            });
+           
+        }
+        function testNodePost(){
+            ajaxSetting = getDefaultAjaxSettings();
+            ajaxSetting.method = "POST";
+            ajaxSetting.contentType = "application/json";
+            ajaxSetting.url = "https://api.usaspending.gov/api/v2/bulk_download/list_agencies/";
+            ajaxSetting.data = "{\"agency\": 14}";
+            ajaxSetting.success =  function (data, status, xhr) {
+                console.log(status);
+
+>>>>>>> 136472d06e62d0bd61021b56c0d00d3a157ea659
                 let prettyText = JSON.stringify(data, null, 2);
                 console.log(prettyText);
                 $('#images').html("<pre>"+prettyText+ "</pre>") ;
@@ -59,12 +150,16 @@
             jQuery.ajax(ajaxSetting);
 
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 136472d06e62d0bd61021b56c0d00d3a157ea659
         function testNodeDelete(){
             ajaxSetting = getDefaultAjaxSettings();
             ajaxSetting.method = "DELETE";
             ajaxSetting.contentType = "application/json";
             ajaxSetting.url = "http://127.0.0.1:8080/id/2";
+<<<<<<< HEAD
             ajaxSetting.success =  function (data, status, xhr) {
                 console.log(status);
 
@@ -82,6 +177,20 @@
             ajaxSetting.success =  function (data, status, xhr) {
                 console.log(status);
 
+=======
+           // ajaxSetting.data = "{\"agency\": 14}";
+            ajaxSetting.success =  function (data, status, xhr) {
+                console.log(status);
+
+                // let prettyText = JSON.stringify(data, null, 2);
+                // console.log(prettyText);
+                // $('#images').html("<pre>"+prettyText+ "</pre>") ;
+                // let responseHeaders = xhr.getAllResponseHeaders();
+                // //   let responseHeader = xhr.getResponseHeader();
+                // let responseText = xhr.responseText;
+                // let responseCode = xhr.status;
+                // let statusText = xhr.statusText;
+>>>>>>> 136472d06e62d0bd61021b56c0d00d3a157ea659
             }
 
             jQuery.ajax(ajaxSetting);
@@ -169,6 +278,7 @@
             return ajaxSettings;
         }
 
+<<<<<<< HEAD
       
 
 
@@ -191,8 +301,52 @@
 
            test();
             };
+=======
+        function test() {
+            //see http://api.jquery.com/jQuery.ajax/#jqXHR  as well as https://zinoui.com/blog/cross-domain-ajax-request
+            let callSettings = getDefaultAjaxSettings();
+            callSettings.url = "https://api.usaspending.gov/api/v2/financial_balances/agencies/?funding_agency_id=775&fiscal_year=2017";
+            callSettings.url = "http://vus-glems-02:21212/commits/v1/approvers/me";
+            //callSettings.url = "http://dca-db-407:21212/commits/v1/approvers/me";
+            callSettings.url = "http://ems.amat.com:21212/commits/v1/approvers/me";
+            //   callSettings.url = "http://vus-glems-02.amat.com:21212/commits/v1/approvers/me";
+            //callSettings.dataType = "jsonp text json";
+            callSettings.xhrFields = { withCredentials: true };
+            $.ajax(callSettings);
+            // var promise = $.ajax(ajaxSettings);
+            // promise.done(function( data ){
+            //     console.log(data);
+            // });
+
+        }
+
+
+
+        (function () {
+            //   var flickerAPI = "https://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?";
+            //   $.getJSON( flickerAPI, {
+            //     tags: "mount rainier",
+            //     tagmode: "any",
+            //     format: "json"
+            //   })
+            //     .done(function( data ) {
+            //       $.each( data.items, function( i, item ) {
+            //         $( "<img>" ).attr( "src", item.media.m ).appendTo( "#images" );
+            //         if ( i === 3 ) {
+            //           return false;
+            //         }
+            //       });
+            //     });
+
+           // test();
+        })();
+>>>>>>> 136472d06e62d0bd61021b56c0d00d3a157ea659
     </script>
 
 </body>
 
+<<<<<<< HEAD
 </html>
+=======
+</html>
+>>>>>>> 136472d06e62d0bd61021b56c0d00d3a157ea659

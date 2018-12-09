@@ -4,34 +4,10 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "Launch Chrome against localhost",
+            "name": "AjaxTest Chrome",
             "url": "http://localhost:8080/ajaxtest.html",
-            "webRoot": "${workspaceRoot}/ajax",
-            "sourceMaps": true,
-            "sourceMapPathOverrides": {
-                "webpack:///./*": "${webRoot}/*",
-                "webpack:///src/*": "${webRoot}/*",
-                "webpack:///*": "*",
-                "webpack:///./~/*": "${webRoot}/node_modules/*",
-                "meteor://💻app/*": "${webRoot}/*"
-            }
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Ajax - Nodeserver",
-            "program": "${workspaceFolder}\\ajax\\server.js",
-            "trace": true,
-            "sourceMaps": true,
-            "sourceMapPathOverrides": {
-                "webpack:///./*": "${webRoot}/*",
-                "webpack:///src/*": "${webRoot}/*",
-                "webpack:///*": "*",
-                "webpack:///./~/*": "${webRoot}/node_modules/*",
-                "meteor://💻app/*": "${webRoot}/*"
-            }
-            
-          
+            "webRoot": "${workspaceRoot}",
+            "sourceMaps": true
         }
     ]
 }
